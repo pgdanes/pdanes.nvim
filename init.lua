@@ -142,15 +142,8 @@ require('lazy').setup({
     },
   },
 
-  {
-    -- Theme inspired by Atom
-    'projekt0n/github-nvim-theme',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd('colorscheme github_dark_dimmed')
-    end,
-  },
+  'projekt0n/github-nvim-theme',
+  'f-person/auto-dark-mode.nvim',
 
   {
     -- Set lualine as statusline
@@ -551,3 +544,16 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Setup auto theme switching 
+local auto_dark_mode = require('auto-dark-mode')
+
+auto_dark_mode.setup({
+  update_interval = 3000,
+  set_dark_mode = function()
+    vim.cmd('colorscheme github_dark_dimmed')
+  end,
+  set_light_mode = function()
+    vim.cmd('colorscheme github_light')
+  end,
+})
