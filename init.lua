@@ -142,7 +142,17 @@ require('lazy').setup({
     },
   },
 
-  'projekt0n/github-nvim-theme',
+
+  {
+    -- Theme inspired bygithub 
+    'projekt0n/github-nvim-theme',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd('colorscheme github_dark_dimmed')
+    end,
+  },
+
   'f-person/auto-dark-mode.nvim',
 
   {
