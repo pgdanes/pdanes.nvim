@@ -1,42 +1,3 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-
-Kickstart.nvim is *not* a distribution.
-
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, understand
-  what your configuration is doing, and modify it to suit your needs.
-
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
-
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-
-  And then you can explore or search through `:help lua-guide`
-  - https://neovim.io/doc/user/lua-guide.html
-
-
-Kickstart Guide:
-
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
-
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now :)
---]]
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -57,6 +18,7 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   }
 end
+
 vim.opt.rtp:prepend(lazypath)
 
 -- NOTE: Here is where you install your plugins.
@@ -109,6 +71,27 @@ require('lazy').setup({
     },
   },
 
+  {
+    'Exafunction/codeium.vim',
+    event = 'BufEnter',
+    config = function ()
+      vim.g.codeium_no_map_tab = true
+
+      local set_codeium_keymap = function (mode, keymap, command)
+        vim.keymap.set(mode, keymap, function ()
+          return vim.fn['codeium#' .. command]()
+        end, { expr = true, silent = true })
+      end
+
+      set_codeium_keymap('i', '<D-j>', 'Accept')
+
+      -- other commands 
+      -- CycleCompletions(1)
+      -- CycleCompletions(-1)
+      -- Clear()
+    end
+  },
+
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim', opts = {} },
   {
@@ -152,8 +135,6 @@ require('lazy').setup({
       vim.cmd('colorscheme github_dark_dimmed')
     end,
   },
-
-  'f-person/auto-dark-mode.nvim',
 
   {
     -- Set lualine as statusline
@@ -398,15 +379,11 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+vim.keymap.set('n', '<leader>E', ':Explore<CR>', { noremap = true, silent = true })
+
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
-  -- NOTE: Remember that lua is a real programming language, and as such it is possible
-  -- to define small helper and utility functions so you don't have to repeat yourself
-  -- many times.
-  --
-  -- In this case, we create a function that lets us more easily define mappings specific
-  -- for LSP related items. It sets the mode, buffer and description for us each time.
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -470,7 +447,6 @@ local servers = {
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -493,9 +469,10 @@ mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
 }
 
+local lspconfig = require('lspconfig')
 mason_lspconfig.setup_handlers {
   function(server_name)
-    require('lspconfig')[server_name].setup {
+    lspconfig[server_name].setup {
       capabilities = capabilities,
       on_attach = on_attach,
       settings = servers[server_name],
@@ -503,6 +480,22 @@ mason_lspconfig.setup_handlers {
     }
   end
 }
+
+-- Odin / Ols
+lspconfig.ols.setup {
+  cmd = { 'ols' }
+}
+
+-- TODO: Setup gleam lspconfig via https://github.com/neovim/nvim-lspconfig?tab=readme-ov-file#suggested-configuration
+lspconfig.gleam.setup{}
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(event)
+    local opts = { buffer = event.buf }
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+  end
+})
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -552,18 +545,7 @@ cmp.setup {
   },
 }
 
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
-
--- Setup auto theme switching 
-local auto_dark_mode = require('auto-dark-mode')
-
-auto_dark_mode.setup({
-  update_interval = 3000,
-  set_dark_mode = function()
-    vim.cmd('colorscheme github_dark_dimmed')
-  end,
-  set_light_mode = function()
-    vim.cmd('colorscheme github_light')
-  end,
-})
+vim.cmd('tnoremap <Esc> <C-\\><C-n>')
+vim.cmd("set tabstop=4")
+vim.cmd("set shiftwidth=4")
+vim.cmd("set expandtab")
