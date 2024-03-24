@@ -151,6 +151,29 @@ require('lazy').setup({
   },
 
   {
+    'f-person/auto-dark-mode.nvim',
+    opts = {
+      update_interval = 1000,
+      set_dark_mode = function()
+        -- TODO: This should probably be entirely separate, instead of having
+        -- neovim set it.
+        vim.cmd('silent !kitten themes "Github Dark Dimmed"')
+        vim.cmd('colorscheme github_dark')
+        -- TODO: This should probably be entirely separate, instead of having
+        -- neovim set it.
+        require('lualine').setup { options = { theme = "onedark" }}
+      end,
+      set_light_mode = function()
+        -- TODO: This should probably be entirely separate, instead of having
+        -- neovim set it.
+        vim.cmd('silent !kitten themes "Github"')
+        vim.cmd('colorscheme github_light_default')
+        require('lualine').setup { options = { theme = "onelight" }}
+      end
+    },
+  },
+
+  {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
@@ -544,6 +567,7 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
 
 vim.cmd('tnoremap <Esc> <C-\\><C-n>')
 vim.cmd("set tabstop=4")
