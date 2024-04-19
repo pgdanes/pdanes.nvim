@@ -8,7 +8,7 @@ vim.g.maplocalleader = ' '
 
 require("setup.lazy");
 require("options");
-require("keybinds");
+require("keymaps");
 
 require("setup.lsp")
 require("setup.telescope");
