@@ -25,6 +25,14 @@ require('lazy').setup({
     -- Detect tabstop and shiftwidth automatically
     'tpope/vim-sleuth',
 
+    {
+        dir = "~/source/nvim-plugins/nug",
+        name = "nug",
+        config = function()
+            require('nug')
+        end
+    },
+
     -- NOTE: This is where your plugins related to LSP can be installed.
     --  The configuration is done below. Search for lspconfig to find it below.
     {
@@ -83,25 +91,6 @@ require('lazy').setup({
             -- CycleCompletions(-1)
             -- Clear()
         end
-    },
-
-    {
-        "kawre/leetcode.nvim",
-        build = ":TSUpdate html",
-        dependencies = {
-            "nvim-telescope/telescope.nvim",
-            "nvim-lua/plenary.nvim", -- required by telescope
-            "MunifTanjim/nui.nvim",
-
-            -- optional
-            "nvim-treesitter/nvim-treesitter",
-            "rcarriga/nvim-notify",
-            "nvim-tree/nvim-web-devicons",
-        },
-        opts = {
-            lang = "typescript"
-            -- configuration goes here
-        },
     },
 
     -- Useful plugin to show you pending keybinds.
@@ -231,6 +220,12 @@ require('lazy').setup({
                     return vim.fn.executable 'make' == 1
                 end,
             },
+            {
+                'nvim-tree/nvim-web-devicons',
+                config = function()
+                    require('nvim-web-devicons').setup()
+                end
+            }
         },
     },
 
