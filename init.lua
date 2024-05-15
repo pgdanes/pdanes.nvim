@@ -15,6 +15,7 @@ require("setup.telescope");
 require("setup.treesitter");
 require("setup.cmp");
 
+
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
 --
