@@ -1,5 +1,3 @@
-
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -14,6 +12,7 @@ require("setup.lsp")
 require("setup.telescope");
 require("setup.treesitter");
 require("setup.cmp");
+require("setup.harpoon");
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -26,12 +25,4 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     pattern = '*',
 })
 
-
--- vim.api.nvim_create_autocmd('LspAttach', {
---     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
---     callback = function(event)
---         local opts = { buffer = event.buf }
---         vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
---     end
--- })
---
+-- vim.lsp.set_log_level("info")

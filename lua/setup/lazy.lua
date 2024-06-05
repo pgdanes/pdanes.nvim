@@ -122,7 +122,7 @@ require('lazy').setup({
                 changedelete = { text = '~' },
             },
             on_attach = function(bufnr)
-                vim.keymap.set('n', '<leader>hp',
+                vim.keymap.set('n', '<leader>gp',
                     require('gitsigns').preview_hunk,
                     { buffer = bufnr, desc = 'Preview git hunk' })
 
@@ -203,14 +203,14 @@ require('lazy').setup({
         },
     },
 
-    {
-        -- Add indentation guides even on blank lines
-        'lukas-reineke/indent-blankline.nvim',
-        -- Enable `lukas-reineke/indent-blankline.nvim`
-        -- See `:help indent_blankline.txt`
-        main = "ibl",
-        opts = {},
-    },
+    -- {
+    --     -- Add indentation guides even on blank lines
+    --     'lukas-reineke/indent-blankline.nvim',
+    --     -- Enable `lukas-reineke/indent-blankline.nvim`
+    --     -- See `:help indent_blankline.txt`
+    --     main = "ibl",
+    --     opts = {},
+    -- },
 
     -- "gc" to comment visual regions/lines
     { 'numToStr/Comment.nvim', opts = {} },
@@ -267,5 +267,13 @@ require('lazy').setup({
                 },
             })
         end
+    },
+
+    { "Olical/conjure" },
+
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        dependencies = { "nvim-lua/plenary.nvim" }
     }
 }, {})
