@@ -101,7 +101,8 @@ mason_lspconfig.setup_handlers {
 local extra_servers = {
     "ols",
     "zls",
-    "racket_langserver"
+    "racket_langserver",
+    "gleam"
 }
 
 for _, server_name in pairs(extra_servers) do

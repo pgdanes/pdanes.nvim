@@ -13,6 +13,7 @@ require("setup.telescope");
 require("setup.treesitter");
 require("setup.cmp");
 require("setup.harpoon");
+require("setup.hop");
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`

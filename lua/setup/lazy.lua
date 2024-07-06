@@ -15,6 +15,12 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+local color_scheme = {
+    day = "tokyonight-day",
+    night = "tokyonight-night",
+    lualine = "tokyonight",
+}
+
 require('lazy').setup({
     -- NOTE: First, some plugins that don't require any configuration
 
@@ -98,11 +104,6 @@ require('lazy').setup({
             end
 
             set_codeium_keymap('i', '<D-j>', 'Accept')
-
-            -- other commands
-            -- CycleCompletions(1)
-            -- CycleCompletions(-1)
-            -- Clear()
         end
     },
 
@@ -176,6 +177,8 @@ require('lazy').setup({
         end
     },
 
+    { "bluz71/vim-moonfly-colors", name = "moonfly", lazy = false, priority = 1000 },
+
     {
         -- Set lualine as statusline
         'nvim-lualine/lualine.nvim',
@@ -183,7 +186,7 @@ require('lazy').setup({
         opts = {
             options = {
                 icons_enabled = false,
-                theme = 'tokyonight',
+                theme = color_scheme.lualine,
                 component_separators = '|',
                 section_separators = '',
             },
@@ -195,22 +198,22 @@ require('lazy').setup({
         opts = {
             update_interval = 1000,
             set_dark_mode = function()
-                vim.cmd('colorscheme tokyonight-night')
+                vim.cmd('colorscheme ' .. color_scheme.night)
             end,
             set_light_mode = function()
-                vim.cmd('colorscheme tokyonight-day')
+                vim.cmd('colorscheme ' .. color_scheme.day)
             end
         },
     },
 
-    -- {
-    --     -- Add indentation guides even on blank lines
-    --     'lukas-reineke/indent-blankline.nvim',
-    --     -- Enable `lukas-reineke/indent-blankline.nvim`
-    --     -- See `:help indent_blankline.txt`
-    --     main = "ibl",
-    --     opts = {},
-    -- },
+    {
+        -- Add indentation guides even on blank lines
+        'lukas-reineke/indent-blankline.nvim',
+        -- Enable `lukas-reineke/indent-blankline.nvim`
+        -- See `:help indent_blankline.txt`
+        main = "ibl",
+        opts = {},
+    },
 
     -- "gc" to comment visual regions/lines
     { 'numToStr/Comment.nvim', opts = {} },
@@ -278,9 +281,10 @@ require('lazy').setup({
     },
 
     {
-        'ggandor/leap.nvim',
-        config = function()
-            require('leap').create_default_mappings()
-        end
-    }
+        'smoka7/hop.nvim',
+        version = "*",
+        opts = {
+            keys = 'etovxqpdygfblzhckisuran'
+        }
+    },
 }, {})
