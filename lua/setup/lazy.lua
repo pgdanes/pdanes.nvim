@@ -17,8 +17,7 @@ vim.opt.rtp:prepend(lazypath)
 
 local color_scheme = {
     day = "tokyonight-day",
-    night = "tokyonight-night",
-    lualine = "tokyonight",
+    night = "tokyonight-night"
 }
 
 require('lazy').setup({
@@ -186,7 +185,7 @@ require('lazy').setup({
         opts = {
             options = {
                 icons_enabled = false,
-                theme = color_scheme.lualine,
+                theme = "auto",
                 component_separators = '|',
                 section_separators = '',
             },
