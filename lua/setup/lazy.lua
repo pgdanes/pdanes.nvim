@@ -30,13 +30,13 @@ require('lazy').setup({
     -- Detect tabstop and shiftwidth automatically
     'tpope/vim-sleuth',
 
-    {
-        dir = "~/source/nvim-plugins/nug.nvim",
-        name = "nug",
-        config = function()
-            require('nug')
-        end
-    },
+    -- {
+    --     dir = "~/source/nvim-plugins/nug.nvim",
+    --     name = "nug",
+    --     config = function()
+    --         require('nug')
+    --     end
+    -- },
 
     -- NOTE: This is where your plugins related to LSP can be installed.
     --  The configuration is done below. Search for lspconfig to find it below.
@@ -90,21 +90,21 @@ require('lazy').setup({
         end
     },
 
-    {
-        'Exafunction/codeium.vim',
-        event = 'BufEnter',
-        config = function()
-            vim.g.codeium_no_map_tab = true
-
-            local set_codeium_keymap = function(mode, keymap, command)
-                vim.keymap.set(mode, keymap, function()
-                    return vim.fn['codeium#' .. command]()
-                end, { expr = true, silent = true })
-            end
-
-            set_codeium_keymap('i', '<D-j>', 'Accept')
-        end
-    },
+    -- {
+    --     'Exafunction/codeium.vim',
+    --     event = 'BufEnter',
+    --     config = function()
+    --         vim.g.codeium_no_map_tab = true
+    --
+    --         local set_codeium_keymap = function(mode, keymap, command)
+    --             vim.keymap.set(mode, keymap, function()
+    --                 return vim.fn['codeium#' .. command]()
+    --             end, { expr = true, silent = true })
+    --         end
+    --
+    --         set_codeium_keymap('i', '<D-j>', 'Accept')
+    --     end
+    -- },
 
     -- Useful plugin to show you pending keybinds.
     { 'folke/which-key.nvim',  opts = {} },
