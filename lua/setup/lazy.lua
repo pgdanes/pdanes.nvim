@@ -1,8 +1,5 @@
--- Install package manager
---    https://github.com/folke/lazy.nvim
---    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
     vim.fn.system {
         'git',
         'clone',
@@ -14,29 +11,14 @@ if not vim.loop.fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
-
-local color_scheme = {
-    day = "tokyonight-day",
-    night = "tokyonight-night"
-}
-
 require('lazy').setup({
     -- NOTE: First, some plugins that don't require any configuration
-
     -- Git related plugins
     'tpope/vim-fugitive',
     'tpope/vim-rhubarb',
-
     -- Detect tabstop and shiftwidth automatically
     'tpope/vim-sleuth',
-
-    -- {
-    --     dir = "~/source/nvim-plugins/nug.nvim",
-    --     name = "nug",
-    --     config = function()
-    --         require('nug')
-    --     end
-    -- },
+    'gpanders/nvim-parinfer',
 
     -- NOTE: This is where your plugins related to LSP can be installed.
     --  The configuration is done below. Search for lspconfig to find it below.
@@ -47,6 +29,7 @@ require('lazy').setup({
             -- Automatically install LSPs to stdpath for neovim
             { 'williamboman/mason.nvim', config = true },
             'williamboman/mason-lspconfig.nvim',
+            'WhoIsSethDaniel/mason-tool-installer.nvim',
 
             -- Useful status updates for LSP
             -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -55,9 +38,6 @@ require('lazy').setup({
                 tag = 'legacy',
                 opts = {}
             },
-
-            -- Additional lua configuration, makes nvim stuff amazing!
-            'folke/neodev.nvim',
         },
     },
 
@@ -68,10 +48,8 @@ require('lazy').setup({
             -- Snippet Engine & its associated nvim-cmp source
             'L3MON4D3/LuaSnip',
             'saadparwaiz1/cmp_luasnip',
-
             -- Adds LSP completion capabilities
             'hrsh7th/cmp-nvim-lsp',
-
             -- Adds a number of user-friendly snippets
             'rafamadriz/friendly-snippets',
         },
@@ -107,7 +85,10 @@ require('lazy').setup({
     -- },
 
     -- Useful plugin to show you pending keybinds.
-    { 'folke/which-key.nvim',  opts = {} },
+    {
+        'folke/which-key.nvim',
+        opts = {}
+    },
 
     {
         -- Adds git related signs to the gutter, as well as utilities for managing changes
@@ -181,11 +162,9 @@ require('lazy').setup({
     {
         -- Set lualine as statusline
         'nvim-lualine/lualine.nvim',
-        -- See `:help lualine.txt`
         opts = {
             options = {
                 icons_enabled = false,
-                theme = "auto",
                 component_separators = '|',
                 section_separators = '',
             },
@@ -193,32 +172,20 @@ require('lazy').setup({
     },
 
     {
-        'f-person/auto-dark-mode.nvim',
-        opts = {
-            update_interval = 1000,
-            set_dark_mode = function()
-                vim.cmd('colorscheme ' .. color_scheme.night)
-            end,
-            set_light_mode = function()
-                vim.cmd('colorscheme ' .. color_scheme.day)
-            end
-        },
-    },
-
-    {
         -- Add indentation guides even on blank lines
         'lukas-reineke/indent-blankline.nvim',
-        -- Enable `lukas-reineke/indent-blankline.nvim`
-        -- See `:help indent_blankline.txt`
         main = "ibl",
         opts = {},
     },
 
-    -- "gc" to comment visual regions/lines
-    { 'numToStr/Comment.nvim', opts = {} },
-
-    -- Fuzzy Finder (files, lsp, etc)
     {
+        -- "gc" to comment visual regions/lines
+        'numToStr/Comment.nvim',
+        opts = {}
+    },
+
+    {
+        -- Fuzzy Finder (files, lsp, etc)
         'nvim-telescope/telescope.nvim',
         branch = '0.1.x',
         dependencies = {
@@ -254,36 +221,8 @@ require('lazy').setup({
     },
 
     {
-        "nvim-neotest/neotest",
-        dependencies = {
-            "nvim-neotest/nvim-nio",
-            "nvim-neotest/neotest-plenary",
-            "nvim-lua/plenary.nvim",
-            "antoinemadec/FixCursorHold.nvim",
-            "nvim-treesitter/nvim-treesitter"
-        },
-        config = function()
-            require("neotest").setup({
-                adapters = {
-                    require("neotest-plenary"),
-                },
-            })
-        end
-    },
-
-    { "Olical/conjure" },
-
-    {
-        "ThePrimeagen/harpoon",
-        branch = "harpoon2",
-        dependencies = { "nvim-lua/plenary.nvim" }
-    },
-
-    {
-        'smoka7/hop.nvim',
-        version = "*",
-        opts = {
-            keys = 'etovxqpdygfblzhckisuran'
-        }
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {},
     },
 }, {})
