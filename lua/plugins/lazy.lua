@@ -12,16 +12,11 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
-    -- NOTE: First, some plugins that don't require any configuration
-    -- Git related plugins
     'tpope/vim-fugitive',
     'tpope/vim-rhubarb',
-    -- Detect tabstop and shiftwidth automatically
     'tpope/vim-sleuth',
     'gpanders/nvim-parinfer',
 
-    -- NOTE: This is where your plugins related to LSP can be installed.
-    --  The configuration is done below. Search for lspconfig to find it below.
     {
         -- LSP Configuration & Plugins
         'neovim/nvim-lspconfig',
@@ -31,8 +26,6 @@ require('lazy').setup({
             'williamboman/mason-lspconfig.nvim',
             'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-            -- Useful status updates for LSP
-            -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
             {
                 'j-hui/fidget.nvim',
                 tag = 'legacy',
@@ -56,6 +49,7 @@ require('lazy').setup({
     },
 
     {
+        -- file browser
         'stevearc/oil.nvim',
         opts = {},
         dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -68,86 +62,14 @@ require('lazy').setup({
         end
     },
 
-    -- {
-    --     'Exafunction/codeium.vim',
-    --     event = 'BufEnter',
-    --     config = function()
-    --         vim.g.codeium_no_map_tab = true
-    --
-    --         local set_codeium_keymap = function(mode, keymap, command)
-    --             vim.keymap.set(mode, keymap, function()
-    --                 return vim.fn['codeium#' .. command]()
-    --             end, { expr = true, silent = true })
-    --         end
-    --
-    --         set_codeium_keymap('i', '<D-j>', 'Accept')
-    --     end
-    -- },
-
-    -- Useful plugin to show you pending keybinds.
     {
+        -- Useful plugin to show you pending keybinds.
         'folke/which-key.nvim',
         opts = {}
     },
 
     {
-        -- Adds git related signs to the gutter, as well as utilities for managing changes
-        'lewis6991/gitsigns.nvim',
-        opts = {
-            -- See `:help gitsigns.txt`
-            signs = {
-                add = { text = '+' },
-                change = { text = '~' },
-                delete = { text = '_' },
-                topdelete = { text = '‾' },
-                changedelete = { text = '~' },
-            },
-            on_attach = function(bufnr)
-                vim.keymap.set('n', '<leader>gp',
-                    require('gitsigns').preview_hunk,
-                    { buffer = bufnr, desc = 'Preview git hunk' })
-
-                -- don't override the built-in and fugitive keymaps
-                local gs = package.loaded.gitsigns
-
-                vim.keymap.set({ 'n', 'v' }, ']c', function()
-                        if vim.wo.diff
-                        then
-                            return ']c'
-                        end
-
-                        vim.schedule(function()
-                            gs.next_hunk()
-                        end)
-                        return '<Ignore>'
-                    end,
-                    {
-                        expr = true,
-                        buffer = bufnr,
-                        desc = "Jump to next hunk"
-                    })
-
-                vim.keymap.set({ 'n', 'v' }, '[c', function()
-                        if vim.wo.diff then
-                            return '[c'
-                        end
-
-                        vim.schedule(function()
-                            gs.prev_hunk()
-                        end)
-
-                        return '<Ignore>'
-                    end,
-                    {
-                        expr = true,
-                        buffer = bufnr,
-                        desc = "Jump to previous hunk"
-                    })
-            end,
-        },
-    },
-
-    {
+        -- theme
         "folke/tokyonight.nvim",
         lazy = false,
         priority = 1000,
@@ -156,8 +78,6 @@ require('lazy').setup({
             vim.cmd("colorscheme tokyonight-night")
         end
     },
-
-    { "bluz71/vim-moonfly-colors", name = "moonfly", lazy = false, priority = 1000 },
 
     {
         -- Set lualine as statusline
