@@ -59,8 +59,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- Enable the following language servers
 local servers = {
-    ocamllsp = {},
-    html = {},
     lua_ls = {
         Lua = {
             log_level = vim.lsp.protocol.MessageType.TRACE,
@@ -96,10 +94,3 @@ require('mason-lspconfig').setup {
       end,
     },
 }
-
-vim.lsp.config['janet-lsp'] = {
-  cmd = { 'janet-lsp' },
-  filetypes = { 'janet' },
-  root_markers = { '.git' },
-}
-vim.lsp.enable('janet-lsp')
