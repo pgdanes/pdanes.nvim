@@ -72,7 +72,7 @@ require('lazy').setup({
         -- theme
         "armannikoyan/rusty",
         config = function()
-            vim.cmd("colorscheme ")
+            vim.cmd("colorscheme rusty")
         end
     },
 
