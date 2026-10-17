@@ -1,83 +1,42 @@
--- [[ Configure Telescope ]]
--- See `:help telescope` and `:help telescope.setup()`
-local telescope = require("telescope")
-local builtin = require("telescope.builtin");
-local themes = require("telescope.themes");
-
-telescope.setup {
-    defaults = {
-        mappings = {
-            i = {
-                ['<C-u>'] = false,
-                ['<C-d>'] = false,
-            },
+return {
+    'nvim-telescope/telescope.nvim',
+    dependencies = {
+        'nvim-lua/plenary.nvim',
+        'nvim-tree/nvim-web-devicons',
+        {
+            'nvim-telescope/telescope-fzf-native.nvim',
+            build = 'make',
+            cond = function()
+                return vim.fn.executable('make') == 1
+            end,
         },
     },
-}
+    config = function()
+        local telescope = require('telescope')
+        local builtin = require('telescope.builtin')
+        telescope.setup({
+            defaults = { mappings = { i = { ['<C-u>'] = false, ['<C-d>'] = false } } },
+        })
+        pcall(telescope.load_extension, 'fzf')
 
--- Enable telescope fzf native, if installed
-pcall(telescope.load_extension, 'fzf')
-
--- See `:help telescope.builtin`
-vim.keymap.set(
-    'n', '<leader>?',
-    builtin.oldfiles,
-    { desc = '[?] Find recently opened files' }
-)
-
-vim.keymap.set(
-    'n', '<leader><space>',
-    builtin.buffers,
-    { desc = '[ ] Find existing buffers' }
-)
-
-vim.keymap.set(
-    'n', '<leader>/',
-    function()
-        -- You can pass additional configuration to telescope to change theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(
-            themes.get_dropdown {
+        local pickers = {
+            ['?'] = { 'oldfiles', '[?] Find recently opened files' },
+            ['<space>'] = { 'buffers', '[ ] Find existing buffers' },
+            gf = { 'git_files', 'Search [G]it [F]iles' },
+            sf = { 'find_files', '[S]earch [F]iles' },
+            sh = { 'help_tags', '[S]earch [H]elp' },
+            sg = { 'live_grep', '[S]earch by [G]rep' },
+            sd = { 'diagnostics', '[S]earch [D]iagnostics' },
+            sr = { 'resume', '[S]earch [R]esume' },
+        }
+        for key, picker in pairs(pickers) do
+            vim.keymap.set('n', '<leader>' .. key, builtin[picker[1]], { desc = picker[2] })
+        end
+        vim.keymap.set('n', '<leader>/', function()
+            builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown({
                 winblend = 5,
                 previewer = false,
-            }
-        )
+            }))
+        end, { desc = '[/] Fuzzily search in current buffer' })
     end,
-    { desc = '[/] Fuzzily search in current buffer' }
-)
-
-
-vim.keymap.set(
-    'n', '<leader>gf',
-    builtin.git_files,
-    { desc = 'Search [G]it [F]iles' }
-)
-
-vim.keymap.set(
-    'n', '<leader>sf',
-    builtin.find_files,
-    { desc = '[S]earch [F]iles' }
-)
-
-vim.keymap.set(
-    'n', '<leader>sh',
-    builtin.help_tags,
-    { desc = '[S]earch [H]elp' }
-)
-
-vim.keymap.set(
-    'n', '<leader>sg',
-    builtin.live_grep,
-    { desc = '[S]earch by [G]rep' }
-)
-
-vim.keymap.set(
-    'n', '<leader>sd',
-    builtin.diagnostics,
-    { desc = '[S]earch [D]iagnostics' }
-)
-
-vim.keymap.set(
-    'n', '<leader>sr',
-    builtin.resume,
-    { desc = '[S]earch [R]esume' }
-)
+}
