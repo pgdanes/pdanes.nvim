@@ -18,6 +18,10 @@ require('lazy').setup({
     'gpanders/nvim-parinfer',
 
     {
+        'vlime/vlime'
+    },
+
+    {
         -- LSP Configuration & Plugins
         'neovim/nvim-lspconfig',
         dependencies = {
@@ -134,10 +138,14 @@ require('lazy').setup({
     {
         -- Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter-textobjects',
-        },
+        branch = 'main',
         build = ':TSUpdate',
+    },
+
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = "main",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
     },
 
     {

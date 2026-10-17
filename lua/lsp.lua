@@ -59,15 +59,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- Enable the following language servers
 local servers = {
-    ocamllsp = {},
-    html = {},
-    lua_ls = {
-        Lua = {
-            log_level = vim.lsp.protocol.MessageType.TRACE,
-            workspace = { checkThirdParty = false },
-            telemetry = { enable = false },
-        },
-    },
+  html = {},
 }
 
 local ensure_installed = vim.tbl_keys(servers or {})
@@ -80,26 +72,22 @@ require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 require('mason-lspconfig').setup {
     automatic_enable = true,
     automatic_installation = false,
-    ensure_installed = {},
-    handlers = {
-      function(server_name)
-        local server = servers[server_name] or {}
-
-        server.capabilities = vim.tbl_deep_extend(
-          'force',
-          {},
-          capabilities,
-          server.capabilities or {}
-        )
-
-        require('lspconfig')[server_name].setup(server)
-      end,
+    ensure_installed = {
+      "lua_ls"
     },
 }
 
-vim.lsp.config['janet-lsp'] = {
-  cmd = { 'janet-lsp' },
-  filetypes = { 'janet' },
-  root_markers = { '.git' },
-}
-vim.lsp.enable('janet-lsp')
+vim.lsp.enable("ocamllsp")
+vim.lsp.config('lua_ls', {
+    settings = {
+        Lua = {
+            runtime = {
+              version = 'LuaJIT',
+            },
+            workspace = {
+                library = { "${3rd}/love2d/library"},
+            }
+        }
+    }
+})
+
